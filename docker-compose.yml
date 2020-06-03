@@ -23,7 +23,7 @@ services:
     networks: 
       - net
     ports:
-      - '27017'
+      - '27018'
 networks: 
   net:
     driver: bridge
