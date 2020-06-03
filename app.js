@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 5000;
 
 console.log(process.env.DB_PATH);
 
-mongoose.connect(`mongodb://${process.env.DB_PATH || 'localhost'}/oer?authSource=admin`, { 
+mongoose.connect(`mongodb://${process.env.DB_PATH || 'localhost'}/oer`, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
     useCreateIndex: true
