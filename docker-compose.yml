@@ -1,0 +1,33 @@
+version: '3'
+services: 
+  app:
+    container_name: isesu
+    restart: always
+    build: .
+    links: 
+      - isesudb
+    volumes: 
+      - store:/usr/src/app/public/uploads
+      - node_modules:/usr/src/app/node_modules
+    networks:
+      - net
+    ports: 
+      - '83:5000'
+    environment: 
+      - DB_PATH=isesudb
+  isesudb:
+    container_name: isesudb
+    image: mongo
+    volumes: 
+      - dba:/data/db
+    networks: 
+      - net
+    ports:
+      - '27017'
+networks: 
+  net:
+    driver: bridge
+volumes: 
+  dba:
+  store:
+  node_modules:
