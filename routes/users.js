@@ -10,7 +10,7 @@ const router = express.Router();
 const { authorized } = require("../config/auth");
 
 //SENDGRID
-const SENDGRID_API_KEY = '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';
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 
 const User = require("../models/User");
 
