@@ -8,7 +8,7 @@ services:
       - isesudb
     volumes: 
       - store:/usr/src/app/public/uploads
-      - node_modules:/usr/src/app/node_modules
+      - modules:/usr/src/app/node_modules
     networks:
       - net
     ports: 
@@ -30,4 +30,4 @@ networks:
 volumes: 
   dba:
   store:
-  node_modules:
+  modules:

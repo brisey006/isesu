@@ -10,7 +10,7 @@ const router = express.Router();
 const { authorized } = require("../config/auth");
 
 //SENDGRID
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const User = require("../models/User");
 
@@ -95,7 +95,7 @@ router.get("/forgot-password", async (req, res) => {
 });
 
 //Register
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
   const { username, email, password, password2 } = req.body;
   let errors = [];
 
@@ -140,27 +140,26 @@ router.post("/register", async (req, res) => {
           if (err) throw err;
           newUser.password = hash;
 
-          //Send email verification
-          sgMail.setApiKey(SENDGRID_API_KEY);
-          const msg = {
+          newUser.save()
+          .then(user => {
+            const msg = {
               to: newUser.email,
-              from: 'noreply@isesu263.com',
+              from: 'digitalhundred263@gmail.com',
               subject: 'Verify your ISESU account',
               text: 'We are checking if you own this email address',
               html: `<h3>Click this link to verify your ISESU account<h3><p>${process.env.API_HOST}/api/users/verify/${newUser.verificationToken}`,
-          };
-          sgMail.send(msg)
-          .then(() => {
-            newUser.save()
-            .then(user => {
+            };
+            sgMail.send(msg)
+            .then(() => {
               res.status(200).json(user);
             })
-            .catch(err => {
-              console.log(err);
+            .catch(e => {
+              console.log(e.response.body.errors);
+              next(err);
             });
           })
-          .catch(er => {
-            console.log(err);
+          .catch(err => {
+            next(err);
           });
         })
       );

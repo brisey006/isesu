@@ -7,6 +7,11 @@ const passport = require('passport');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
 const app = express();
 
 require('dotenv').config();
@@ -32,14 +37,28 @@ app.use('/api', require('./routes/index'));
 
 const PORT = process.env.PORT || 5000;
 
-console.log(process.env.DB_PATH);
+const dbPath = `mongodb://${process.env.DB_PATH || 'localhost'}/oer`;
 
-mongoose.connect(`mongodb://${process.env.DB_PATH || 'localhost'}/oer`, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    useCreateIndex: true
-}, () => {
-    console.log('Mongo is up!');
+mongoose.connect(dbPath, 
+    { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+        useCreateIndex: true
+    }, (err) => {
+        console.log('Mongo is up!');
+    });
+
+app.use((req, res, next) => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
+});
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        message: error.message
+    });
 });
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
