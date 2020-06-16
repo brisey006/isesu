@@ -6,6 +6,7 @@ const cors = require('cors');
 const passport = require('passport');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -15,6 +16,7 @@ mongoose.set('useUnifiedTopology', true);
 const app = express();
 
 require('dotenv').config();
+app.use(morgan('tiny'));
 //Passport configuration
 require('./config/passport')(passport);
 
