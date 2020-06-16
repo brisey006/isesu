@@ -5,7 +5,7 @@ const router = express.Router();
 const { authorized } = require('../config/auth');
 
 //Mongo connection
-mongoose.connect('mongodb://localhost/oer', { useNewUrlParser: true });
+
 
 const Profile = require('../models/profile');
 const User = require('../models/User');
