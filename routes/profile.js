@@ -102,8 +102,9 @@ router.get('/:id', async (req, res) => {
             res.status(200).json({
                 error: "Profile not available. Edit profile to continue"
             });
+        } else {
+            res.status(200).json(data);
         }
-        res.status(200).json(data);
     }).catch(err => {
         res.status(500).send(err);
     });
