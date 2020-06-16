@@ -39,14 +39,18 @@ const PORT = process.env.PORT || 5000;
 
 const dbPath = `mongodb://${process.env.DB_PATH || 'localhost'}/oer`;
 
-mongoose.connect(dbPath, 
-    { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true,
-        useCreateIndex: true
-    }, (err) => {
-        console.log('Mongo is up!');
-    });
+try {
+    mongoose.connect(dbPath, 
+        { 
+            useNewUrlParser: true, 
+            useUnifiedTopology: true,
+            useCreateIndex: true
+        }, (err) => {
+            console.log('Mongo is up!');
+        });
+} catch(e) {
+    console.log(e.message);
+}
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
