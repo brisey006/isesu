@@ -17,13 +17,13 @@ router.post('/', async (req, res) => {
     try{
         let { title, description, fileUrl, fileType, hyperLink, levels, subjects, id, author, publisher, licence, topic, resourceUse, thumbnail } = req.body;
 
+        levels = levels == undefined ? [] : levels;
+        subjects = subjects == undefined ? [] : subjects;
+
         let resource = Resource({ title, description, fileUrl, fileType, hyperLink, author, publisher, licence, topic, resourceUse, thumbnail, approved: false });
         const user = await User.findById(id);
         //const subjectLevel = await Level.findById(level);
         resource.creator = user._id;
-
-        levels = levels == undefined ? [] : levels;
-        subjects = subjects == undefined ? [] : subjects;
 
         if (levels.length > 0) {
             for (let i = 0; i < levels.length; i++){
