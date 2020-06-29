@@ -15,15 +15,16 @@ function escapeRegex(text) {
 
 router.post('/', async (req, res) => {
     let { title, description, fileUrl, fileType, hyperLink, levels, subjects, id, author, publisher, licence, topic, resourceUse, thumbnail } = req.body;
-    console.log(levels);
-    console.log(subjects);
     try{
         
 
-        levels = levels == undefined ? [] : levels;
+        levels = levels == undefined || levels == null ? [] : levels;
         subjects = subjects == undefined ? [] : subjects;
 
-        
+        subjects = subjects.filter(e => e != '');
+
+        console.log(levels);
+        console.log(subjects);
 
         let resource = Resource({ title, description, fileUrl, fileType, hyperLink, author, publisher, licence, topic, resourceUse, thumbnail, approved: false });
         const user = await User.findById(id);
