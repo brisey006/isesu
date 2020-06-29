@@ -22,8 +22,8 @@ router.post('/', async (req, res) => {
         //const subjectLevel = await Level.findById(level);
         resource.creator = user._id;
 
-        levels = levels == null ? [] : levels;
-        subjects = subjects == null ? [] : subjects;
+        levels = levels == undefined ? [] : levels;
+        subjects = subjects == undefined ? [] : subjects;
 
         if (levels.length > 0) {
             for (let i = 0; i < levels.length; i++){
