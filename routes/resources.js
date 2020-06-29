@@ -23,9 +23,6 @@ router.post('/', async (req, res) => {
 
         subjects = subjects.filter(e => e != '');
 
-        console.log(levels);
-        console.log(subjects);
-
         let resource = Resource({ title, description, fileUrl, fileType, hyperLink, author, publisher, licence, topic, resourceUse, thumbnail, approved: false });
         const user = await User.findById(id);
         //const subjectLevel = await Level.findById(level);
@@ -50,6 +47,7 @@ router.post('/', async (req, res) => {
         const savedResource = await resource.save();
         await user.resources.push(savedResource);
         await user.save();
+        console.log(user);
         res.status(201).json(savedResource);
 
     } catch(err) {
