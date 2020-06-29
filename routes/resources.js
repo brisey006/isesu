@@ -15,43 +15,36 @@ function escapeRegex(text) {
 
 router.post('/', async (req, res) => {
     try{
-        console.log(req.body);
-        const { title, description, fileUrl, fileType, hyperLink, levels, subjects, id, author, publisher, licence, topic, resourceUse, thumbnail } = req.body;
-
-        console.log(fileUrl);
-        console.log(description);
+        let { title, description, fileUrl, fileType, hyperLink, levels, subjects, id, author, publisher, licence, topic, resourceUse, thumbnail } = req.body;
 
         let resource = Resource({ title, description, fileUrl, fileType, hyperLink, author, publisher, licence, topic, resourceUse, thumbnail, approved: false });
         const user = await User.findById(id);
         //const subjectLevel = await Level.findById(level);
         resource.creator = user._id;
 
-        if (levels == null) {
-            res.json({ error: 'Add levels' });
-        } else if (subjects == null) {
-            res.json({ error: 'Add subjects' });
-        } else {
-            if (levels.length > 0) {
-                for (let i = 0; i < levels.length; i++){
-                    const level = await Level.findById(levels[i]);
-                    resource.levels.push(level);
-                }
-            }
+        levels = levels == null ? [] : levels;
+        subjects = subjects == null ? [] : subjects;
 
-            if (subjects.length > 0) {
-                for (let i = 0; i < subjects.length; i++){
-                    const subject = await Subject.findById(subjects[i]);
-                    subject.resources.push(resource._id);
-                    resource.subjects.push(subject);
-                    await subject.save();
-                }
+        if (levels.length > 0) {
+            for (let i = 0; i < levels.length; i++){
+                const level = await Level.findById(levels[i]);
+                resource.levels.push(level);
             }
-    
-            const savedResource = await resource.save();
-            await user.resources.push(savedResource);
-            await user.save();
-            res.status(201).json(savedResource);
         }
+
+        if (subjects.length > 0) {
+            for (let i = 0; i < subjects.length; i++){
+                const subject = await Subject.findById(subjects[i]);
+                subject.resources.push(resource._id);
+                resource.subjects.push(subject);
+                await subject.save();
+            }
+        }
+
+        const savedResource = await resource.save();
+        await user.resources.push(savedResource);
+        await user.save();
+        res.status(201).json(savedResource);
 
     } catch(err) {
         console.log(err.message);
