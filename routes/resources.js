@@ -20,6 +20,9 @@ router.post('/', async (req, res) => {
         levels = levels == undefined ? [] : levels;
         subjects = subjects == undefined ? [] : subjects;
 
+        console.log(levels);
+        console.log(subjects);
+
         let resource = Resource({ title, description, fileUrl, fileType, hyperLink, author, publisher, licence, topic, resourceUse, thumbnail, approved: false });
         const user = await User.findById(id);
         //const subjectLevel = await Level.findById(level);
